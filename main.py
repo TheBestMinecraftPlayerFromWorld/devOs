@@ -1,12 +1,18 @@
 from time import sleep
-from imports import *
+import tkinter as tk
 from tkinter import font
 import tkinterweb
 import mouse
 import threading
 moveWindow = None
+
+class user:
+    name = ""
+    perm = ""
+
 class Os:
     def __init__(self):
+        self.path = "C:/ddevOs"
         self.devOSw = tk.Tk()
         self.openedApps = []
         self.devOSw.title("DevOS")
@@ -17,6 +23,7 @@ class Os:
         #self.devOSw.bind("<ButtonRelease-1>", Os.mouseButtonReleased)
         
         self.devOSw.configure(background="black")
+        
     def mouseButtonReleased(event):
         print("Release")
         setMoveWindow(None)
@@ -47,13 +54,14 @@ def addListener():
 t = threading.Thread(target=addListener)
 t.start()
 
+
 devOs = Os()
 class devOsAppAPI:
     class window:
         def mmWE(self,event):
             #print(event)
             pass#mouseMoved(self)
-        def __init__(self,height:int,width:int,name:str,bgcolor:str) -> None:
+        def __init__(self,height,width,name,bgcolor) -> None:
             self.window = tk.Frame(devOs.devOSw,height=height,width=width,bg=bgcolor)
             self.windowMoveBar = tk.Frame(self.window)#,height=200)
             self.moveBtn = tk.Button(self.windowMoveBar,text="Move",command=lambda:setMoveWindow(self))#,width=200)
@@ -72,7 +80,7 @@ class devOsAppAPI:
             #self.content = tk.Frame(self.window,height=height-self.windowMoveBar.winfo_height())
             devOs.openedApps.append(self)
             #print(devOs.openedApps)
-        def move(self,x:int,y:int) -> None:
+        def move(self,x,y) -> None:
             self.window.place(x=x,y=y)
             #self.window.move()eeeeeeeeeeeeeeeeeeeeeeeeeee
 
@@ -141,6 +149,9 @@ class appBar:
         self.browser.pack()
         self.browser.place(x=450)
         #return l
+class login:
+    def __init__(self) -> None:
+        pass
 
 if __name__ == "__main__":
     #explorer()
