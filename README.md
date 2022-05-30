@@ -1,2 +1,2 @@
 # devOs
-An OS only for developers!
+Open Source developer Operating System
