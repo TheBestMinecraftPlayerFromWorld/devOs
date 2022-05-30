@@ -2,7 +2,6 @@ from time import sleep
 import tkinter as tk
 from tkinter import font
 import tkinterweb
-import mouse
 import threading
 moveWindow = None
 
@@ -33,7 +32,7 @@ class Os:
 def mm2(event):
     if moveWindow != None:
         #print(devOs.devOSw.winfo_pointerx())
-        moveWindow.window.place(x=devOs.devOSw.winfo_pointerx()-devOs.devOSw.winfo_rootx()-50, y=devOs.devOSw.winfo_pointery()-devOs.devOSw.winfo_rooty())
+        moveWindow.window.place(x=devOs.devOSw.winfo_pointerx()-devOs.devOSw.winfo_rootx()-70, y=devOs.devOSw.winfo_pointery()-devOs.devOSw.winfo_rooty())
         #print(moveWindow)
 
 
