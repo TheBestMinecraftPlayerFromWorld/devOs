@@ -9,6 +9,7 @@ import hashlib
 import base64
 import math
 from pathlib import Path
+import datetime
 moveWindow = None
 uapap = []
 userOs = ""
@@ -399,23 +400,79 @@ if userOs == "windows":
                         
                         t+=x
                         f.write(t)
+                    os.mkdir(f"{osPath}/users/{p[0]}")
+                    os.mkdir(f"{osPath}/users/{p[0]}/Desktop")
                     self.lastLines.append(f"Succesfully added User {p[0]}")
             self.reload()
                 #os.
         def exec(self):
             self.cmdPro()
 
-
-    apps = [menu,explorer,browser,taskConfiguration,Terminal]
+    class calculater:
+        name = "Calculater"
+        def __init__(self):
+            self.win = devOsAppAPI.window(240,150,self.name,"red")
+            self.win.window.pack(expand=True)
+            self.win.window.place(x=300,y=700)
+            self.rechnung = ""
+            self.rechnungL = tk.Label(self.win.window,text=self.rechnung,height=1,anchor='w')
+            self.rechnungL.place(y=30)
+            self.ergebnis = tk.Label(self.win.window,text=0,height=1,anchor='w')
+            self.ergebnis.place(y=60)
+            x = "AC"
+            b = tk.Button(self.win.window,text=str(x),command=lambda:self.clearRechnung())
+            b.place(x=0,y=90)
+            x = "+/-"
+            b = tk.Button(self.win.window,text=str(x),command=lambda c = "-":self.addAtBeginning(c))
+            b.place(x=30,y=90)
+            ct = 1
+            for x in range(3):
+                for y in range(3):
+                    b = tk.Button(self.win.window,text=str(ct),command=lambda c = ct:self.addToRechnung(c))
+                    b.place(x=x*30,y=(y+4)*30)
+                    ct+=1
+            rechenzeichen = ["/","*","-","+"]
+            ct = 0
+            for y in rechenzeichen:
+                b = tk.Button(self.win.window,text=y,command=lambda c = y:self.addToRechnung(c))
+                b.place(x=120,y=(ct+3)*30)
+                ct+=1
+            x = "0"
+            b = tk.Button(self.win.window,text=str(x),command=lambda c = x:self.addToRechnung(c))
+            b.place(x=0,y=210)
+            x = "."
+            b = tk.Button(self.win.window,text=str(x),command=lambda c = x:self.addToRechnung(c))
+            b.place(x=30,y=210)
+            
+        def addToRechnung(self,num):
+            self.rechnung += str(num)
+            self.rechnungL.config(text=self.rechnung)    
+            self.ergebnis.config(text=str(eval(self.rechnung)))
+        def addAtBeginning(self,num):
+            self.rechnung = num + self.rechnung
+            self.rechnungL.config(text=self.rechnung)    
+            self.ergebnis.config(text=str(eval(self.rechnung)))
+        def clearRechnung(self):
+            self.rechnung = ""
+            self.rechnungL.config(text=self.rechnung)    
+            self.ergebnis.config(text=str(eval(self.rechnung)))
+    apps = [menu,explorer,browser,taskConfiguration,Terminal,calculater]
     class appBar:
         loadedApps = []
+        def returnClock(self):
+            now = datetime.datetime.now()
+            return f"{now.hour}:{now.minute}"
         def __init__(self) -> None:
             self.bar = tk.Frame(devOs.devOSw,height=50,width=1000,bg="red",)
             self.bar.pack_propagate(0)
             self.bar.pack(expand=True)
             self.bar.place(x=480,y=900)
             devOs.appBar = self.bar
+            self.clock = tk.Label(self.bar,text="0:0",bg="red")
             self.loadAvalibleApps()
+            self.clock.place(x=966,y=27)
+            t1 = threading.Thread(target=self.loadClock)
+            t1.start()
         def loadAvalibleApps(self):
             self.loadedApps = []
             co = 0
@@ -424,7 +481,11 @@ if userOs == "windows":
                 self.loadedApps[co].pack()
                 self.loadedApps[co].place(x=(co+0.5)*(1000/len(apps)))
                 co+=1
-            
+        def loadClock(self):
+            tx = self.returnClock()
+            self.clock.config(text=tx)
+            sleep(1)
+            self.loadClock()
             #return l
     class login:
         def __init__(self) -> None:
@@ -452,8 +513,8 @@ if userOs == "windows":
                 self.lP.delete(0,"end")
                 self.lP.insert(0, "")
     def start():
-        login()
-        #appBar()
+        #login()
+        appBar()
         devOs.devOSw.mainloop() 
     if __name__ == "__main__":
         start()
