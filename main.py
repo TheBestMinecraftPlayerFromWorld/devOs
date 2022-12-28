@@ -172,21 +172,23 @@ if userOs == "windows":
     class textPreview:
         name = "Text Preview"
         def __init__(self,path) -> None:
-            self.win = devOsAppAPI.window(500,600,self.name,"white")
+            self.win = devOsAppAPI.window(500,600,self.name,"red")
             self.win.window.pack(expand=True)
             self.text = []
             self.path = path
             self.displayText()
+            self.saveBtn = tk.Button(self.win.window,text="Save",command=self.save)
+            self.saveBtn.place(y=470)
         def displayText(self):
             with open(self.path,'r',encoding="utf-8") as f:
-                y = 30
-                for l in f.readlines():
-                    self.text.append(tk.Label(self.win.window,text=l,bg="white"))
-                    self.text[len(self.text)-1].pack()
-                    self.text[len(self.text)-1].place(y=y)
-                    y += 30
-                    
-
+                t  = f.read()
+                self.x = tk.Text(self.win.window, width=74, height=26)
+                self.x.place(y=30)
+                self.x.delete(1.0,"end")
+                self.x.insert(1.0, t)
+        def save(self):
+            with open(self.path,'w',encoding="utf-8") as f:
+                f.write(self.x.get("1.0",tk.END))
     class explorer:
         name = "Explorer"
         def __init__(self,path=f"{osPath}/users/{user.name}/Desktop") -> None:
@@ -513,8 +515,8 @@ if userOs == "windows":
                 self.lP.delete(0,"end")
                 self.lP.insert(0, "")
     def start():
-        #login()
-        appBar()
+        login()
+        #appBar()
         devOs.devOSw.mainloop() 
     if __name__ == "__main__":
         start()
